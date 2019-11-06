@@ -1,0 +1,11 @@
+from setuptools import setup
+
+setup(name='teddy',
+      version='0.2',
+      description='Teddy Utilities',
+      url='http://github.com/kkatayama',
+      author='Teddt',
+      author_email='katayama@udel.edu',
+      license='MIT',
+      packages=['teddy'],
+      zip_safe=False)
