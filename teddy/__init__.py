@@ -60,7 +60,7 @@ def get_length_itertools(iter_type, iter_obj, iter_size):
     total : int
         The total number of subsequence iterable objects
     """
-    
+
     candidates = len(iter_obj)
     if 'permutation' in iter_type:
         total = 1
@@ -74,7 +74,7 @@ def get_length_itertools(iter_type, iter_obj, iter_size):
 
 
 def js_minify(raw):
-    return raw..replace('\n','').replace('    ','').replace(' = ','=').replace(') {','){').replace(', ',',')
+    return raw.replace('\n','').replace('    ','').replace(' = ','=').replace(') {','){').replace(', ',',')
 
 
 if __name__ == '__main__':
