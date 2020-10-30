@@ -72,6 +72,11 @@ def get_length_itertools(iter_type, iter_obj, iter_size):
         total = binomail(candidates, iter_size)
     return total
 
+
+def js_minify(raw):
+    return raw..replace('\n','').replace('    ','').replace(' = ','=').replace(') {','){').replace(', ',',')
+
+
 if __name__ == '__main__':
     option = sys.argv[1:]
     if option == 'emacs':
