@@ -74,7 +74,10 @@ def get_length_itertools(iter_type, iter_obj, iter_size):
 
 
 def js_minify(raw):
-    return raw.replace('\n','').replace('    ','').replace(' = ','=').replace(') {','){').replace(', ',',')
+    modifiers = ['\n', '\t', '    ', '  ']
+    for m in modifiers:
+        raw = raw.replace(m, '')
+    return raw.replace(' = ','=').replace(') {','){').replace(', ',',')
 
 
 if __name__ == '__main__':
