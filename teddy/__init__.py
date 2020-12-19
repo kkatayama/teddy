@@ -11,6 +11,7 @@ get_length_itertools(iter_type, iter_obj, iter_size)
 """
 from math import factorial as mf
 import sys
+import os
 # import markdown
 
 def binomail(n, r):
@@ -79,6 +80,11 @@ def js_minify(raw):
         raw = raw.replace(m, '')
     return raw.replace(' = ','=').replace(') {','){').replace(', ',',')
 
+
+def find_cmd(cmd):
+    for cmd_path in os.environ['PATH'].split(':'):
+        if os.path.isdir(cmd_path) and cmd in os.listdir(cmd_path):
+            return os.path.join(cmd_path, cmd)
 
 if __name__ == '__main__':
     option = sys.argv[1:]
