@@ -81,10 +81,17 @@ def js_minify(raw):
     return raw.replace(' = ','=').replace(') {','){').replace(', ',',')
 
 
-def find_cmd(cmd):
+def find_cmd(cmd, find_all=False):
+    cmds = []
     for cmd_path in os.environ['PATH'].split(':'):
         if os.path.isdir(cmd_path) and cmd in os.listdir(cmd_path):
-            return os.path.join(cmd_path, cmd)
+            bin_cmd = os.path.join(cmd_path, cmd)
+            if find_all:
+                cmds += [bin_cmd]
+            else:
+                return bin_cmd
+    return cmds
+
 
 if __name__ == '__main__':
     option = sys.argv[1:]
