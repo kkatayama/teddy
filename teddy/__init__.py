@@ -19,7 +19,7 @@ from math import factorial as mf
 
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
-LOG_FILE = '{}.log'.format(MODULE.split('.')[:-1])
+LOG_FILE = '{}.log'.format(os.path.splitext(MODULE))
 field_styles = {
     'asctime': {'color': 221, 'bright': True},
     'programname': {'color': 45, 'faint': True},
