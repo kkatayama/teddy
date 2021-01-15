@@ -51,11 +51,15 @@ def getLogger():
     return logger
 
 
-def binomail(n, r):
-    return (mf(n)/(mf(r)*mf(n-r)))
-
 def split_string(line, n):
     return [line[i:i+n] for i in range(0, len(line), n)]
+
+def print_header(item, size=0, tab=4):
+    item = str(item)
+    size = size if size else tab + len(item) + tab
+    header = '+{}+\n|{:^{size}}|\n+{}+'.format('-'*size, item, '-'*size, size=size)
+    print(header)
+    return header
 
 def xor2(s1, s2):
     c_max = max(s1, s2)
@@ -68,6 +72,9 @@ def xor2(s1, s2):
         r += chr(ord(c_min[i_min])^ord(c_max[i_max]))
         i_min += 1
     return r
+
+def binomail(n, r):
+    return (mf(n)/(mf(r)*mf(n-r)))
 
 def get_length_itertools(iter_type, iter_obj, iter_size):
     """
