@@ -54,12 +54,14 @@ def getLogger():
 def split_string(line, n):
     return [line[i:i+n] for i in range(0, len(line), n)]
 
-def print_header(item, size=0, tab=4):
+def print_header(item, size=0, tab=4, log=False):
     item = str(item)
     size = size if size else tab + len(item) + tab
     header = '+{}+\n|{:^{size}}|\n+{}+'.format('-'*size, item, '-'*size, size=size)
+
+    if log:
+        return header
     print(header)
-    return header
 
 def xor2(s1, s2):
     c_max = max(s1, s2)
