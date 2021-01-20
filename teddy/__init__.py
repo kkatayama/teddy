@@ -51,6 +51,30 @@ def getLogger():
     return logger
 
 
+
+def convert_bytes(number_in_bytes):
+    '''
+    ### USAGE ###
+    from teddy import convert_bytes
+
+    print(convert_bytes(10248000))
+
+    9.77 MB
+    '''
+    tags = [ "B", "KB", "MB", "GB", "TB" ]
+
+    i = 0
+    double_bytes = bytes_number
+
+    while (i < len(tags) and  bytes_number >= 1024):
+            double_bytes = bytes_number / 1024.0
+            i = i + 1
+            bytes_number = bytes_number / 1024
+
+    return str(round(double_bytes, 2)) + " " + tags[i]
+
+
+
 def split_string(line, n):
     return [line[i:i+n] for i in range(0, len(line), n)]
 
