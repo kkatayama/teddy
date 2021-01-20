@@ -15,6 +15,7 @@ import logging
 import coloredlogs
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
+from lucidic import Lucidic
 # import markdown
 
 # -- CONFIGS -- #
@@ -50,6 +51,19 @@ def getLogger():
     coloredlogs.install(level='DEBUG', fmt=log_format, field_styles=field_styles, level_styles=level_styles)
     return logger
 
+
+def getInfo(obj, unique_value, desired_keys):
+    idx = Lucidic(obj)
+    idx_q = idx.search(unique_value, strict=True)
+    info = {}
+    for key in desired_keys:
+        kdx   = Lucidic(obj)
+        kdx_q = kdx.search(key)
+        for k in kdx_q:
+            if k['keypath'] == idx_q[0]['keypath']:
+                info.update(idx_q[0]['match'])
+                info.update(k['match'])
+    return info
 
 
 def convert_bytes(number_in_bytes):
