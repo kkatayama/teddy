@@ -78,12 +78,12 @@ def convert_bytes(number_in_bytes):
     tags = [ "B", "KB", "MB", "GB", "TB" ]
 
     i = 0
-    double_bytes = bytes_number
+    double_bytes = number_in_bytes
 
-    while (i < len(tags) and  bytes_number >= 1024):
-            double_bytes = bytes_number / 1024.0
+    while (i < len(tags) and  number_in_bytes >= 1024):
+            double_bytes = number_in_bytes / 1024.0
             i = i + 1
-            bytes_number = bytes_number / 1024
+            number_in_bytes = number_in_bytes / 1024
 
     return str(round(double_bytes, 2)) + " " + tags[i]
 
