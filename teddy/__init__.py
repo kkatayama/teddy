@@ -14,7 +14,7 @@ import os
 import sys
 import logging
 import coloredlogs
-from rich.console import Console
+from rich import print
 from chardet.universaldetector import UniversalDetector
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
@@ -190,7 +190,7 @@ def find_cmd(cmd, find_all=False):
 # -- taken from: "https://github.com/apsun/AniConvert/blob/master/aniconvert.py"
 def process_handbrake_output(process):
     def print_err(message="", end="\n", flush=False):
-        console.print(message, end=end, file=sys.stderr)
+        print(message, end=end, file=sys.stderr)
         if flush:
             sys.stderr.flush()
 
