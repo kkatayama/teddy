@@ -167,8 +167,8 @@ def js_minify(raw):
 
 def find_cmd(cmd, find_all=False):
     cmds = []
-    for cmd_path in filter(os.path.isdir, os.environ['PATH'].split(':')):
-        if cmd.lower() in map(str.lower, os.listdir(cmd_path)):
+    for cmd_path in list(filter(os.path.isdir, os.environ['PATH'].split(':'))):
+        if cmd.lower() in list(map(str.lower, os.listdir(cmd_path))):
             bin_cmd = os.path.join(cmd_path, cmd)
             if find_all:
                 cmds += [bin_cmd]
