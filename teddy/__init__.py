@@ -14,6 +14,7 @@ import os
 import sys
 import logging
 import coloredlogs
+from chardet.universaldetector import UniversalDetector
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
 from lucidic import Lucidic
@@ -227,6 +228,18 @@ def process_handbrake_output(process):
             prev_message = message
     finally:
         print_err(flush=True)
+
+
+def getFileEncoding(file_name):
+    detector = UniversalDetector()
+    detector.reset()
+    with open(file_name, 'rb') as f:
+        for line in f:
+            detector.feed(line)
+            if detector.done:
+                break
+    detector.close()
+    return detector.result
 
 
 if __name__ == '__main__':
