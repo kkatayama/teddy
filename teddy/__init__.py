@@ -38,7 +38,6 @@ level_styles = {
     "critical": {'color': 'red', 'bold': True, 'background': 'red'}
 }
 log_format = "%(asctime)s: [%(programname)s: %(funcName)s();%(lineno)s] %(message)s"
-console = Console()
 
 
 def getFileHandler():
