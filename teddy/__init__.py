@@ -20,7 +20,7 @@ from lucidic import Lucidic
 
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
-LOG_FILE = '{}.log'.format(os.path.splitext(MODULE)[0])
+LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
 field_styles = {
     'asctime': {'color': 221, 'bright': True},
     'programname': {'color': 45, 'faint': True},
@@ -168,7 +168,7 @@ def js_minify(raw):
 def find_cmd(cmd, find_all=False):
     cmds = []
     for cmd_path in os.environ['PATH'].split(':'):
-        if os.path.isdir(cmd_path) and cmd in os.listdir(cmd_path):
+        if os.path.isdir(cmd_path) and cmd.lower() in [_cmd.lower() for _cmd in os.listdir(cmd_path)]:
             bin_cmd = os.path.join(cmd_path, cmd)
             if find_all:
                 cmds += [bin_cmd]
