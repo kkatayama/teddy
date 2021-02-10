@@ -9,6 +9,7 @@ get_length_itertools(iter_type, iter_obj, iter_size)
     Returns the total number of iterable items.
 
 """
+import re
 import os
 import sys
 import logging
@@ -88,9 +89,9 @@ def convert_bytes(number_in_bytes):
     return str(round(double_bytes, 2)) + " " + tags[i]
 
 
-
 def split_string(line, n):
     return [line[i:i+n] for i in range(0, len(line), n)]
+
 
 def print_header(item, size=0, tab=4, log=False):
     item = str(item)
@@ -100,6 +101,7 @@ def print_header(item, size=0, tab=4, log=False):
     if log:
         return header
     print(header)
+
 
 def xor2(s1, s2):
     c_max = max(s1, s2)
@@ -113,8 +115,10 @@ def xor2(s1, s2):
         i_min += 1
     return r
 
+
 def binomail(n, r):
     return (mf(n)/(mf(r)*mf(n-r)))
+
 
 def get_length_itertools(iter_type, iter_obj, iter_size):
     """
@@ -176,6 +180,53 @@ def find_cmd(cmd, find_all=False):
             else:
                 return bin_cmd
     return cmds
+
+
+# -- taken from: "https://github.com/apsun/AniConvert/blob/master/aniconvert.py"
+def process_handbrake_output(process):
+    def print_err(message="", end="\n", flush=False):
+        print(message, end=end, file=sys.stderr)
+        if flush:
+            sys.stderr.flush()
+
+    pattern1 = re.compile(r"Encoding: task \d+ of \d+, (\d+\.\d\d) %")
+    pattern2 = re.compile(
+        r"Encoding: task \d+ of \d+, (\d+\.\d\d) % "
+        r"\((\d+\.\d\d) fps, avg (\d+\.\d\d) fps, ETA (\d\dh\d\dm\d\ds)\)")
+    percent_complete = None
+    current_fps = None
+    average_fps = None
+    estimated_time = None
+    prev_message = ""
+    format_str = "Progress: {percent:.2f}% done"
+    long_format_str = format_str + " (FPS: {fps:.2f}, average FPS: {avg_fps:.2f}, ETA: {eta})"
+    try:
+        while True:
+            output = process.stdout.readline()
+            if len(output) == 0:
+                break
+            output = output.rstrip()
+            match = pattern1.match(output)
+            if not match:
+                continue
+            percent_complete = float(match.group(1))
+            match = pattern2.match(output)
+            if match:
+                format_str = long_format_str
+                current_fps = float(match.group(2))
+                average_fps = float(match.group(3))
+                estimated_time = match.group(4)
+            message = format_str.format(
+                percent=percent_complete,
+                fps=current_fps,
+                avg_fps=average_fps,
+                eta=estimated_time)
+            print_err(message, end="")
+            blank_count = max(len(prev_message) - len(message), 0)
+            print_err(" " * blank_count, end="\r")
+            prev_message = message
+    finally:
+        print_err(flush=True)
 
 
 if __name__ == '__main__':
