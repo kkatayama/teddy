@@ -14,6 +14,7 @@ import os
 import sys
 import logging
 import coloredlogs
+from rich.console import Console
 from chardet.universaldetector import UniversalDetector
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
@@ -37,6 +38,8 @@ level_styles = {
     "critical": {'color': 'red', 'bold': True, 'background': 'red'}
 }
 log_format = "%(asctime)s: [%(programname)s: %(funcName)s();%(lineno)s] %(message)s"
+console = Console()
+
 
 def getFileHandler():
     log_file_formatter = coloredlogs.ColoredFormatter(log_format, field_styles=field_styles, level_styles=level_styles)
@@ -44,6 +47,7 @@ def getFileHandler():
     log_file_handler.addFilter(coloredlogs.ProgramNameFilter())
     log_file_handler.setFormatter(log_file_formatter)
     return log_file_handler
+
 
 def getLogger():
     # -- CREATE LOGGER -- #
@@ -186,7 +190,7 @@ def find_cmd(cmd, find_all=False):
 # -- taken from: "https://github.com/apsun/AniConvert/blob/master/aniconvert.py"
 def process_handbrake_output(process):
     def print_err(message="", end="\n", flush=False):
-        print(message, end=end, file=sys.stderr)
+        console.print(message, end=end, file=sys.stderr)
         if flush:
             sys.stderr.flush()
 

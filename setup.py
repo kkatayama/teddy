@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='teddy',
-      version='0.98',
+      version='0.99',
       description='Teddy Utilities',
       url='http://github.com/kkatayama/teddy',
       author='Teddy',
