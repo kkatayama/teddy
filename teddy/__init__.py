@@ -9,16 +9,18 @@ get_length_itertools(iter_type, iter_obj, iter_size)
     Returns the total number of iterable items.
 
 """
-import re
-import os
-import sys
 import logging
-import coloredlogs
-from rich import print
-from chardet.universaldetector import UniversalDetector
+import os
+import re
+import sys
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
+
+import coloredlogs
+from chardet.universaldetector import UniversalDetector
 from lucidic import Lucidic
+from rich import print
+
 # import markdown
 
 # -- CONFIGS -- #
@@ -72,14 +74,14 @@ def getInfo(obj, unique_value, desired_keys):
 
 
 def convert_bytes(number_in_bytes):
-    '''
+    """
     ### USAGE ###
     from teddy import convert_bytes
 
     print(convert_bytes(10248000))
 
     9.77 MB
-    '''
+    """
     tags = [ "B", "KB", "MB", "GB", "TB" ]
 
     i = 0
@@ -243,6 +245,17 @@ def getFileEncoding(file_name):
                 break
     detector.close()
     return detector.result
+
+
+def camel_case_split(line):
+    RE_WORDS = re.compile(r'''
+        # Find words in a string. Order matters!
+        [A-Z]+(?=[A-Z][a-z]) |  # All upper case before a capitalized word
+        [A-Z]?[a-z]+ |  # Capitalized words / all lower case
+        [A-Z]+ |  # All upper case
+        \d+  # Numbers
+    ''', re.VERBOSE)
+    return [word.lower() for word in RE_WORDS.findall(line)]
 
 
 if __name__ == '__main__':
