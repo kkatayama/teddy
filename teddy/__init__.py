@@ -13,16 +13,19 @@ import logging
 import os
 import re
 import sys
+import time
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
 
 import coloredlogs
+import pandas as pd
 from chardet.universaldetector import UniversalDetector
 from lucidic import Lucidic
 from rich import print
 
 # import markdown
 
+__version__ = "1.0.2'
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -256,6 +259,69 @@ def camel_case_split(line):
         \d+  # Numbers
     ''', re.VERBOSE)
     return [word.lower() for word in RE_WORDS.findall(line)]
+
+
+
+def convertEPGTime(p_time="", dt_obj=False, epg_fmt=False):
+    """Convert EPG Programme "start" and/or "stop" time from UTC to EST
+
+    Note:
+        Do not enable `dt_obj` and `epg_fmt` at the same time.
+        Setting `dt_obj` takes precedence over `epg_fmt`.
+
+    Args:
+        p_time (str, datetime): The datetime string (or object) to convert
+        dt_obj (:obj:`bool`, optional): Request datetime object. Default=False
+        epg_fmt (bool, optional): Request epg formatted string. Default=False
+
+    Returns:
+        Converted EST time as a datetime or str object
+
+    Examples:
+        >>> convertEPGTime("20210803180000 +0000")
+        '2021-08-03 02:00:00 PM'
+
+        >>> convertEPGTime("20210803180000 +0000", epg_fmt=True)
+        '20210803140000 -0400'
+
+        >>> convertEPGTime("20210803180000 +0000", dt_obj=True)
+        Timestamp('2021-08-03 14:00:00-0400', tz='US/Eastern')
+
+    """
+    est_dt = pd.to_datetime(p_time).tz_convert('US/Eastern')
+    if dt_obj:
+        return est_dt
+    if epg_fmt:
+        return est_dt.strftime("%Y%m%d%H%M%S %z")
+    return est_dt.strftime("%Y-%m-%d %I:%M:%S %p")
+
+
+def getEPGTimeNow(dt_obj=False, epg_fmt=False):
+    """Return EPG Programme "start" and/or "stop" time based on current time (30 minute start)
+
+    Args:
+        dt_obj (:obj:`bool`, optional): Request datetime object. Default=False
+        epg_fmt (bool, optional): Request epg formatted string. Default=False
+
+    Returns:
+        The current time as a datetime or str object
+
+    Examples:
+    >>> getEPGTimeNow()
+    '2021-08-03 04:00:00 PM'
+
+    >>> getEPGTimeNow(epg_fmt=True)
+    '20210803160000 -0400'
+
+    >>> getEPGTimeNow(dt_obj=True)
+    Timestamp('2021-08-03 16:00:00-0400', tz='US/Eastern')
+    """
+    est_dt = pd.to_datetime(time.time(), unit='s', utc=True).tz_convert('US/Eastern').floor('30min')
+    if dt_obj:
+        return est_dt
+    if epg_fmt:
+        return est_dt.strftime("%Y%m%d%H%M%S %z")
+    return est_dt.strftime("%Y-%m-%d %I:%M:%S %p")
 
 
 if __name__ == '__main__':
