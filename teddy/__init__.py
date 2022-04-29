@@ -14,6 +14,7 @@ import os
 import re
 import sys
 import time
+import hashlib
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
 
@@ -323,6 +324,11 @@ def getEPGTimeNow(dt_obj=False, epg_fmt=False):
         return est_dt.strftime("%Y%m%d%H%M%S %z")
     return est_dt.strftime("%Y-%m-%d %I:%M:%S %p")
 
+def sha_sum(algorithm="sha256", url=""):
+    r = requests.get(url)
+    h = eval(f'hashlib.{algorithm}({r.content}).hexdigest()')
+    size = len(r.content)
+    return h, size
 
 if __name__ == '__main__':
     option = sys.argv[1:]
