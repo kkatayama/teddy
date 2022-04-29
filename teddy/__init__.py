@@ -26,7 +26,7 @@ from rich import print
 
 # import markdown
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
