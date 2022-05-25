@@ -79,6 +79,40 @@ def getInfo(obj, unique_value, desired_keys):
     return info
 
 
+def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
+    """
+    Filter a Neseted Object by Keyword
+
+    Args:
+        key: (str) - should be a dict key, not value
+        rejects: (list) - keys you wish to keep for matches found
+        strict: (boolean) - True = exclusive keyword match, False = partial match
+    Returns:
+        filtered_obj: (list) - list of filtered objects
+    """
+    a_keys = []
+    r_keys = []
+    queries = []
+    results = []
+
+    for key in keys:
+        temp_obj = Lucidic({"stuff": obj}) if isinstance(obj, list) else Lucidic(obj)
+        query = temp_obj.search(key, strict=True)
+        queries.append(query)
+        if accepts:
+            a_keys += [x["keypath"][0] for x in query if x["match"][key] in accepts]
+        else:
+            a_keys += [x["keypath"][0] for x in query]
+        if rejects:
+            r_keys += [x["keypath"][0] for x in query if x["match"][key] in rejects]
+
+    filtered_keys = sorted(set(a_keys) - set(r_keys))
+    for f_key in filtered_keys:
+        m = re.search(r"(?P<key>.+)\[(?P<index>\d+)\]", f_key).groupdict()
+        results.append(temp_obj.dict[m["key"]][int(m["index"])])
+    return results
+
+
 def uniqueDicts(obj):
     """
     Remove Duplicate Objects in a List of Dicts
