@@ -90,6 +90,7 @@ def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
     Returns:
         filtered_obj: (list) - list of filtered objects
     """
+    total_keys = []
     a_keys = []
     r_keys = []
     queries = []
@@ -99,14 +100,13 @@ def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
         temp_obj = Lucidic({"stuff": obj}) if isinstance(obj, list) else Lucidic(obj)
         query = temp_obj.search(key, strict=True)
         queries.append(query)
+        total_keys += [x["keypath"][0] for x in query]
         if accepts:
             a_keys += [x["keypath"][0] for x in query if x["match"][key] in accepts]
-        else:
-            a_keys += [x["keypath"][0] for x in query]
         if rejects:
             r_keys += [x["keypath"][0] for x in query if x["match"][key] in rejects]
 
-    filtered_keys = sorted(set(a_keys) - set(r_keys))
+    filtered_keys = sorted((set(total_keys) & set(a_keys)) - set(r_keys))
     for f_key in filtered_keys:
         m = re.search(r"(?P<key>.+)\[(?P<index>\d+)\]", f_key).groupdict()
         results.append(temp_obj.dict[m["key"]][int(m["index"])])
