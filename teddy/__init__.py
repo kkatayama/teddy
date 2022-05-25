@@ -14,7 +14,7 @@ import os
 import re
 import sys
 import time
-import hashlib
+import json
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
 
@@ -62,7 +62,9 @@ def getLogger():
     coloredlogs.install(level='DEBUG', fmt=log_format, field_styles=field_styles, level_styles=level_styles)
     return logger
 
-
+###############################################################################
+#                               Dictionary Utils                              #
+###############################################################################
 def getInfo(obj, unique_value, desired_keys):
     idx = Lucidic(obj)
     idx_q = idx.search(unique_value, strict=True)
@@ -75,6 +77,18 @@ def getInfo(obj, unique_value, desired_keys):
                 info.update(idx_q[0]['match'])
                 info.update(k['match'])
     return info
+
+
+def uniqueDicts(obj):
+    """
+    Remove Duplicate Objects in a List of Dicts
+
+    Args:
+        obj: list - list of dictionary objects
+    Returns:
+        list: unique list of dictionary objects
+    """
+    return [json.loads(d) for d in set(json.dumps(r, sort_keys=True) for o in obj)]
 
 
 def convert_bytes(number_in_bytes):
