@@ -105,8 +105,10 @@ def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
             a_keys += [x["keypath"][0] for x in query if x["match"][key] in accepts]
         if rejects:
             r_keys += [x["keypath"][0] for x in query if x["match"][key] in rejects]
-
-    filtered_keys = sorted((set(total_keys) & set(a_keys)) - set(r_keys))
+    if a_keys:
+        filtered_keys = sorted((set(total_keys) & set(a_keys)) - set(r_keys))
+    else:
+        filtered_keys = sorted(set(total_keys) - set(r_keys))
     for f_key in filtered_keys:
         m = re.search(r"(?P<key>.+)\[(?P<index>\d+)\]", f_key).groupdict()
         results.append(temp_obj.dict[m["key"]][int(m["index"])])
