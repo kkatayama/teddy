@@ -126,6 +126,16 @@ def uniqueDicts(obj):
     """
     return [json.loads(d) for d in set(json.dumps(r, sort_keys=True) for o in obj)]
 
+###############################################################################
+#                                  Converters                                 #
+###############################################################################
+def strip_ipy_paste(raw):
+    regex = r"""
+        (?P<entry>\s*[In]+\s+\[\d+\]:\s+)     | # IPython Start Entry
+        (?:(?!\n)(?P<line>\s+...:\s))           # IPython Statement Line
+    """
+    r = re.compile(regex, re.VERBOSE)
+    return r.sub("", raw)
 
 def convert_bytes(number_in_bytes):
     """
