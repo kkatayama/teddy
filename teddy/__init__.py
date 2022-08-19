@@ -57,7 +57,7 @@ def getFileHandler():
 
 def getLogger():
     # -- create log directory if needed -- #
-    Path(LOG_FILE).parent.mkdir('logs', exit_ok=True)
+    Path(LOG_FILE).parent.mkdir('logs', exist_ok=True)
 
     # -- CREATE LOGGER -- #
     logger = logging.getLogger(MODULE)
