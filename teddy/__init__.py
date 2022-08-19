@@ -23,6 +23,7 @@ import pandas as pd
 from chardet.universaldetector import UniversalDetector
 from lucidic import Lucidic
 from rich import print
+from pathlib import Path
 
 # import markdown
 
@@ -55,6 +56,9 @@ def getFileHandler():
 
 
 def getLogger():
+    # -- create log directory if needed -- #
+    Path(LOG_FILE).parent.mkdir('logs', exit_ok=True)
+
     # -- CREATE LOGGER -- #
     logger = logging.getLogger(MODULE)
     logger.setLevel(logging.DEBUG)
