@@ -44,7 +44,7 @@ level_styles = {
     "error": {'color': "red", 'bright': True},
     "critical": {'color': 'red', 'bold': True, 'background': 'red'}
 }
-log_format = "[%(asctime)s] [%(levelname)8s] [%(programname)s: %(funcName)s();%(lineno)s] %(message)s"
+log_format = "[%(asctime)s] [%(levelname)-8s] [%(programname)s: %(funcName)s();%(lineno)s] %(message)s"
 
 
 def getFileHandler():
