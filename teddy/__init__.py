@@ -44,7 +44,7 @@ level_styles = {
     "error": {'color': "red", 'bright': True},
     "critical": {'color': 'red', 'bold': True, 'background': 'red'}
 }
-log_format = "[%(asctime)s] [%(levelname)-8s] [%(programname)s: %(funcName)s();%(lineno)s] %(message)s"
+log_format = "[%(asctime)s] [%(levelname)-8s] [%(programname)s: %(funcName)s();%(lineno)s] %(message)s";;;;;6;
 
 
 def getFileHandler():
@@ -63,7 +63,7 @@ def getLogger(level='DEBUG', suppressLibLogs=False):
     logger = logging.getLogger(MODULE)
     logger.setLevel(eval(f'logging.{level}'))
     logger.addHandler(getFileHandler())
-    if suppressLibLog:
+    if suppressLibLogs:
         # -- hide log messages from imported libraries
         coloredlogs.install(level=level, fmt=log_format, field_styles=field_styles, level_styles=level_styles, logger=logger)
     else:
