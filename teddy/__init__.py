@@ -55,7 +55,7 @@ def getFileHandler():
     return log_file_handler
 
 
-def getLogger(level='DEBUG', suppressLibLog=False):
+def getLogger(level='DEBUG', suppressLibLogs=False):
     # -- create log directory if needed -- #
     Path(LOG_FILE).parent.mkdir(exist_ok=True)
 
