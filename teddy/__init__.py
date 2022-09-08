@@ -55,15 +55,19 @@ def getFileHandler():
     return log_file_handler
 
 
-def getLogger():
+def getLogger(level='DEBUG', suppressLibLog=False):
     # -- create log directory if needed -- #
     Path(LOG_FILE).parent.mkdir(exist_ok=True)
 
     # -- CREATE LOGGER -- #
     logger = logging.getLogger(MODULE)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(eval(f'logging.{level}'))
     logger.addHandler(getFileHandler())
-    coloredlogs.install(level='DEBUG', fmt=log_format, field_styles=field_styles, level_styles=level_styles)
+    if suppressLibLog:
+        # -- hide log messages from imported libraries
+        coloredlogs.install(level=level, fmt=log_format, field_styles=field_styles, level_styles=level_styles, logger=logger)
+    else:
+        coloredlogs.install(level=level, fmt=log_format, field_styles=field_styles, level_styles=level_styles)
     return logger
 
 ###############################################################################
