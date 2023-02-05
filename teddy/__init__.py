@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.21"
+__version__ = "1.0.22"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -73,19 +73,21 @@ def getLogger(level='DEBUG', suppressLibLogs=False):
 ###############################################################################
 #                               Dictionary Utils                              #
 ###############################################################################
-def getInfo(obj, unique_value, desired_keys):
-    idx = Lucidic(obj)
-    idx_q = idx.search(unique_value, strict=True)
-    info = {}
-    for key in desired_keys:
-        kdx   = Lucidic(obj)
-        kdx_q = kdx.search(key)
-        for k in kdx_q:
-            if k['keypath'] == idx_q[0]['keypath']:
-                info.update({**{'parent_key': '.'.join(k['keypath'])}, **idx_q[0]['match'], **k['match']})
-                # info.update(idx_q[0]['match'])
-                # info.update(k['match'])
-    return info
+def getInfo(obj, unique_values, desired_keys):
+    objects = []
+    for v in unique_values:
+        idx = Lucidic(obj)
+        idx_q = idx.search(v, strict=True)
+        info = {'.'.join(i['keypath']):{} for i in idx_q}
+        for key in desired_keys:
+            kdx   = Lucidic(obj)
+            kdx_q = kdx.search(key)
+            for k in kdx_q:
+                for m in idx_q:
+                    if k['keypath'] == m['keypath']:
+                        info['.'.join(k['keypath'])].update({**m['match'], **k['match']})
+        objects.append(info)
+    return {k:v for o in objects for (k,v) in o.items()}
 
 
 def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
