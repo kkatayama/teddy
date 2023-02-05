@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.20"
+__version__ = "1.0.21"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -82,7 +82,7 @@ def getInfo(obj, unique_value, desired_keys):
         kdx_q = kdx.search(key)
         for k in kdx_q:
             if k['keypath'] == idx_q[0]['keypath']:
-                info.update({**idx_q[0]['match'], **k['match'], **{'parent_key': '.'.join(k['keypath'])}})
+                info.update({**{'parent_key': '.'.join(k['keypath'])}, **idx_q[0]['match'], **k['match']})
                 # info.update(idx_q[0]['match'])
                 # info.update(k['match'])
     return info
