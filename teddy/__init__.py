@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.24"
+__version__ = "1.0.25"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -74,16 +74,18 @@ def getLogger(level='DEBUG', suppressLibLogs=False):
 #                               Dictionary Utils                              #
 ###############################################################################
 def getInfo(obj={}, unique_values=[], desired_keys=[], strict_values=True, strict_keys=False):
-    objects = []
+    objects = {}
     for v in unique_values:
         idx = Lucidic(obj)
         idx_q = idx.search(v, strict=strict_values)
-        info = {'.'.join(i['keypath']):{} for i in idx_q}
 
         # -- strict search of values
         if not desired_keys:
             for m in idx_q:
-                info['.'.join(m['keypath'])].update({**m['match']})
+                (s,v) = ('.'.join(m['keypath']), m['match'])
+                if s not in objects:
+                    objects[s] = {}
+                objects[s].update(v)
 
         # -- loose search on keys, basically get neighboring {key:value} pairs
         if desired_keys:
