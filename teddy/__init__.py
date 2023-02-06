@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.25"
+__version__ = "1.0.26"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -97,9 +97,7 @@ def getInfo(obj={}, unique_values=[], desired_keys=[], strict_values=True, stric
                         if k['keypath'] == m['keypath']:
                             print(m, k)
                             info['.'.join(k['keypath'])].update({**m['match'], **k['match']})
-        objects.append(info)
-    return {k:v for o in objects for (k,v) in sorted(o.items())}
-
+    return objects
 
 def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
     """
