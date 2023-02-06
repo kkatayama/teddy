@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.23"
+__version__ = "1.0.24"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -73,19 +73,28 @@ def getLogger(level='DEBUG', suppressLibLogs=False):
 ###############################################################################
 #                               Dictionary Utils                              #
 ###############################################################################
-def getInfo(obj, unique_values, desired_keys):
+def getInfo(obj={}, unique_values=[], desired_keys=[], strict_values=True, strict_keys=False):
     objects = []
     for v in unique_values:
         idx = Lucidic(obj)
-        idx_q = idx.search(v, strict=True)
+        idx_q = idx.search(v, strict=strict_values)
         info = {'.'.join(i['keypath']):{} for i in idx_q}
-        for key in desired_keys:
-            kdx   = Lucidic(obj)
-            kdx_q = kdx.search(key)
-            for k in kdx_q:
-                for m in idx_q:
-                    if k['keypath'] == m['keypath']:
-                        info['.'.join(k['keypath'])].update({**m['match'], **k['match']})
+
+        # -- strict search of values
+        if not desired_keys:
+            for m in idx_q:
+                info['.'.join(m['keypath'])].update({**m['match']})
+
+        # -- loose search on keys, basically get neighboring {key:value} pairs
+        if desired_keys:
+            for key in desired_keys:
+                kdx   = Lucidic(obj)
+                kdx_q = kdx.search(key, strict=strict_keys)
+                for k in kdx_q:
+                    for m in idx_q:
+                        if k['keypath'] == m['keypath']:
+                            print(m, k)
+                            info['.'.join(k['keypath'])].update({**m['match'], **k['match']})
         objects.append(info)
     return {k:v for o in objects for (k,v) in sorted(o.items())}
 
