@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.29"
+__version__ = "1.0.30"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -124,7 +124,7 @@ def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
         queries.append(query)
         total_keys += [x["keypath"][0] for x in query]
         if accepts:
-            a_keys += [x["keypath"][0] for x in query if x["match"][key] in accepts]
+            a_keys += [x["keypath"][0] for x in query if ((x["match"].get(key) in accepts) or (x["match"].get(key+"[0]") in accepts))]
         if rejects:
             r_keys += [x["keypath"][0] for x in query if x["match"][key] in rejects]
     if a_keys:
