@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.28"
+__version__ = "1.0.29"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -120,7 +120,7 @@ def filterObjects(obj, keys=[], accepts=[], rejects=[], strict=True):
 
     for key in keys:
         temp_obj = Lucidic({"stuff": obj}) if isinstance(obj, list) else Lucidic(obj)
-        query = temp_obj.search(key, strict=True)
+        query = temp_obj.search(key, strict=strict)
         queries.append(query)
         total_keys += [x["keypath"][0] for x in query]
         if accepts:
