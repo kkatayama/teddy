@@ -27,7 +27,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.30"
+__version__ = "1.0.31"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -83,9 +83,12 @@ def getInfo(obj={}, unique_values=[], desired_keys=[], strict_values=True, stric
         if not desired_keys:
             for m in idx_q:
                 (s,v) = ('.'.join(m['keypath']), m['match'])
-                if s not in objects:
-                    objects[s] = {}
-                objects[s].update(v)
+                if ((s not in objects) and s):
+                    objects[s] = v
+                elif ((s not in objects) and (not s)):
+                    objects.update(v)
+                else:
+                    objects[s].update(v)
 
         # -- loose search on keys, basically get neighboring {key:value} pairs
         if desired_keys:
