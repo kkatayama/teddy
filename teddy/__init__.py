@@ -28,7 +28,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.34"
+__version__ = "1.0.35"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -184,7 +184,7 @@ def convert_bytes(number):
     if isinstance(number, str):
         if r := re.search(r'(?P<num>\d+\.*\d*)[\s_+=-]+(?P<unit>[a-zA-Z]+)', number):
             d = r.groupdict()
-            num, unit = int(r.groupdict()["num"]), r.groupdict()["unit"]
+            num, unit = int(r.groupdict()["num"]), r.groupdict()["unit"].upper()
 
             if len(unit) == 1:
                 unit = ''.join(set(unit+'B'))
