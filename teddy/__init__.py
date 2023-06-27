@@ -17,6 +17,7 @@ import time
 import json
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
+from Crypto.Util.number import bytes_to_long
 
 import coloredlogs
 import pandas as pd
@@ -27,7 +28,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.31"
+__version__ = "1.0.32"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -162,24 +163,54 @@ def strip_ipy_paste(raw):
     r = re.compile(regex, re.VERBOSE)
     return r.sub("", raw)
 
-def convert_bytes(number_in_bytes):
+def convert_bytes(number):
     """
     ### USAGE ###
     from teddy import convert_bytes
 
+    # -- Given the number in bytes...
     print(convert_bytes(10248000))
 
-    9.77 MB
+    =   9.77 MB
+
+    # -- Given the number in a byte unit...
+    print('11578176 kB')
+
+    =   11 GB
     """
     tags = [ "B", "KB", "MB", "GB", "TB" ]
 
-    i = 0
-    double_bytes = number_in_bytes
+    valid = True
+    if isinstance(number, str):
+        if r := re.search(r'(?P<num>\d+\.*\d*)[\s_+=-]+(?P<unit>[a-zA-Z]+)', num_str):
+            d = r.groupdict()
+            num, unit = int(r.groupdict()["num"]), r.groupdict()["unit"]
 
-    while (i < len(tags) and  number_in_bytes >= 1024):
-            double_bytes = number_in_bytes / 1024.0
+            if len(unit) == 1:
+                unit = ''.join(set(unit+'B'))
+            elif len(n) > 2:
+                unit = ''.join(set(unit[0]+'B'))
+            tag_units = {k:pow(10, i*3) for i, k in enumerate(tags)}
+            number = num * tag_units[unit]
+        else:
+            valid = False
+    elif isinstance(number, bytes):
+        number = bytes_to_long(num_bytes)
+    elif not (isinstance(number, int) or isinstance(number, float)):
+        valid = False
+
+    if not valid:
+        print(f"[red]ERROR: {number} is invalid![/]")
+        print(f"[cyan]Acceptible Formats[/]: [green]1024, 1024.12, 1024 KB, b'\x04\x00'[/]")
+        return valid
+
+    i = 0
+    double_bytes = number
+
+    while (i < len(tags) and  number >= 1024):
+            double_bytes = number / 1024.0
             i = i + 1
-            number_in_bytes = number_in_bytes / 1024
+            number = number / 1024
 
     return str(round(double_bytes, 2)) + " " + tags[i]
 
