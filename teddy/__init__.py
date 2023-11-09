@@ -15,6 +15,7 @@ import re
 import sys
 import time
 import json
+import itertools
 from logging.handlers import TimedRotatingFileHandler
 from math import factorial as mf
 from Crypto.Util.number import bytes_to_long
@@ -28,7 +29,7 @@ from pathlib import Path
 
 # import markdown
 
-__version__ = "1.0.37"
+__version__ = "1.0.38"
 # -- CONFIGS -- #
 MODULE = coloredlogs.find_program_name()
 LOG_FILE = 'logs/{}.log'.format(os.path.splitext(MODULE)[0])
@@ -288,6 +289,19 @@ def get_length_itertools(iter_type, iter_obj, iter_size):
     elif 'combination' in iter_type:
         total = binomail(candidates, iter_size)
     return total
+
+
+def char_permutations(word):
+    """
+    given a word, return all case permutations
+
+    example:
+        char_permutations("abc")
+
+    returns:
+        ['abc', 'abC', 'aBc', 'aBC', 'Abc', 'AbC', 'ABc', 'ABC']
+    """
+    return sorted(set(map(''.join, itertools.product(*zip(word.upper(), word.lower())))), reverse=True)
 
 
 def js_minify(raw):
